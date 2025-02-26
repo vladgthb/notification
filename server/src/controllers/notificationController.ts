@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { pool } from '../databases/postgress';
-import { NotificationRecord } from '../types';
+import { NotificationJobData, NotificationRecord } from '../types';
 
 /**
  * GET /notifications
  * - Optionally filter unread via ?unread=true
- * - Example: GET /notifications?userId=alice&unread=true
  */
 export async function getNotifications(
     req: Request,
@@ -81,6 +80,47 @@ export async function patchNotifications(
             updatedCount: result.rowCount,
             updatedRecords: result.rows
         });
+    } catch (err) {
+        next(err);
+    }
+}
+
+/**
+ * POST /notifications
+ * - Create a new notification directly in PostgreSQL.
+ * - Request body should include: userId, type, details.
+ *
+ * Example:
+ * {
+ *   "userId": "alice",
+ *   "type": "ISSUE_STATUS_CHANGED",
+ *   "details": {
+ *     "issueKey": "PROJ-123",
+ *     "oldStatus": "Open",
+ *     "newStatus": "In Progress",
+ *     "message": "Ticket updated."
+ *   }
+ * }
+ */
+export async function createNotification(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    try {
+        const { userId, type, details } = req.body as NotificationJobData;
+        if (!userId || !type || !details) {
+            res.status(400).json({ error: 'Missing required fields: userId, type, details' });
+            return;
+        }
+        const insertQuery = `
+            INSERT INTO notifications (user_id, type, details)
+            VALUES ($1, $2, $3)
+            RETURNING *;
+        `;
+        const values = [userId, type, details];
+        const result = await pool.query<NotificationRecord>(insertQuery, values);
+        res.status(201).json(result.rows[0]);
     } catch (err) {
         next(err);
     }
