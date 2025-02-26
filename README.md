@@ -172,3 +172,48 @@ notification/
     cd client
     npm install
     ```
+
+---
+
+## Running the Application
+The recommended method is to use Docker Compose, which will spin up all services:
+
+1. **Build & Start Containers:**
+
+   From the root directory:
+   ```shell
+   docker-compose up --build
+   ```
+
+2. **Access the Services:**
+
+   •	Backend API: http://localhost:4000
+
+   •	Swagger UI: http://localhost:4000/api-docs
+
+   •	Frontend Client: http://localhost:3000
+
+3.	**Stop the Application**:
+
+   To stop and remove the containers (and optionally volumes):
+   ```shell
+   docker-compose down
+   ```
+
+---
+
+## API Documentation (Swagger)
+
+•	The API is documented using Swagger.
+
+•	Visit http://localhost:4000/api-docs to view the interactive API documentation.
+
+•	The /notifications endpoint supports:
+
+•	GET: Retrieve notifications (optionally filter by unread=true via query params).
+
+•	POST: Create a new notification by adding a job to the queue.
+
+•	PATCH: Mark notifications as read.
+
+The POST endpoint requires a JSON body that includes fields like userId, type, and a details object (which must include issueKey to link the notification to the original task).
