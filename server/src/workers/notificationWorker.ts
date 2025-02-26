@@ -35,6 +35,9 @@ export const notificationWorker = new Worker<NotificationJobData>(
         // Emit a real-time event (Socket.io) if user is online
         if (io()) {
             io()?.to(userId).emit('notification', newNotification);
+            console.log(`Emitted notification to user "${userId}":`, newNotification);
+        } else {
+            console.log(`Socket.io instance not available for user "${userId}"`);
         }
     },
     { connection }

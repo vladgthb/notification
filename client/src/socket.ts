@@ -16,6 +16,10 @@ export function initSocket(userId: string) {
     socket.on('connect_error', (err) => {
         console.error('Socket connect error:', err);
     });
+    socket.on('notification', (data) => {
+        // For debug purpose
+        console.log('Received notification:', data);
+    });
 }
 
 /**
