@@ -36,5 +36,17 @@ services:
     env_file:
       - ./server/.env
 
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: notification_client
+    depends_on:
+      - server
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./client/.env
+
 volumes:
   postgres_data:
