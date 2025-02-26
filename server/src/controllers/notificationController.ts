@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { pool } from '../databases/postgress';
+import { notificationQueue } from '../jobs/notificationQueue';
 import { NotificationJobData, NotificationRecord } from '../types';
 
 /**
@@ -108,19 +109,19 @@ export async function createNotification(
     next: NextFunction
 ): Promise<void> {
     try {
-        const { userId, type, details } = req.body as NotificationJobData;
+        const { userId, type, details, priority } = req.body as NotificationJobData;
         if (!userId || !type || !details) {
             res.status(400).json({ error: 'Missing required fields: userId, type, details' });
             return;
         }
-        const insertQuery = `
-            INSERT INTO notifications (user_id, type, details)
-            VALUES ($1, $2, $3)
-            RETURNING *;
-        `;
-        const values = [userId, type, details];
-        const result = await pool.query<NotificationRecord>(insertQuery, values);
-        res.status(201).json(result.rows[0]);
+        // Add a job to the "notification-queue" for the worker to process.
+        await notificationQueue.add(
+            'createNotification',
+            { userId, type, details, priority },
+            { priority: priority ?? 1, attempts: 3 }
+        );
+        // Return a response indicating that the job has been queued.
+        res.status(201).json({ status: 'queued' });
     } catch (err) {
         next(err);
     }
