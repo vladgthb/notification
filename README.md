@@ -27,7 +27,6 @@ This project supports asynchronous notification processing via a job queue (Bull
 - [Installation & Setup](#installation--setup)
 - [Running the Application](#running-the-application)
 - [API Documentation (Swagger)](#api-documentation-swagger)
-- [Development Notes](#development-notes)
 - [How To Check Functionality](#check)
 
 ---
