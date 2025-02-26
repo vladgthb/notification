@@ -9,7 +9,7 @@ const options = {
             title: 'Notification Service API',
             version: '1.0.0',
             description:
-                'API Documentation for the Notification Service. This endpoint handles both retrieval (GET) and updating (PATCH) of notifications.',
+                'API Documentation for the Notification Service. This endpoint handles retrieval (GET), creation (POST), and updating (PATCH) of notifications.',
         },
         components: {
             schemas: {
@@ -70,6 +70,65 @@ const options = {
                     },
                     required: ['userId', 'notificationIds'],
                 },
+                NotificationCreateRequest: {
+                    type: 'object',
+                    properties: {
+                        userId: {
+                            type: 'string',
+                            example: 'alice',
+                            description: 'The ID of the user to receive the notification.',
+                        },
+                        type: {
+                            type: 'string',
+                            example: 'ISSUE_STATUS_CHANGED',
+                            description: 'Type of the notification (e.g. ISSUE_STATUS_CHANGED).',
+                        },
+                        details: {
+                            type: 'object',
+                            properties: {
+                                issueKey: {
+                                    type: 'string',
+                                    example: 'PROJ-123',
+                                    description:
+                                        'The unique identifier for the original task request. This field must correspond to the original task.',
+                                },
+                                issueSummary: {
+                                    type: 'string',
+                                    example: 'Task: Update login feature',
+                                    description: 'A brief summary of the task.',
+                                },
+                                oldStatus: {
+                                    type: 'string',
+                                    example: 'Open',
+                                },
+                                newStatus: {
+                                    type: 'string',
+                                    example: 'In Progress',
+                                },
+                                oldAssignee: {
+                                    type: 'string',
+                                    example: 'bob',
+                                },
+                                newAssignee: {
+                                    type: 'string',
+                                    example: 'alice',
+                                },
+                                message: {
+                                    type: 'string',
+                                    example: 'Ticket updated.',
+                                },
+                            },
+                            description:
+                                'A JSON object containing additional details regarding the notification. The "issueKey" is required and must match the original task request.',
+                        },
+                        priority: {
+                            type: 'number',
+                            example: 1,
+                            description: 'Priority for processing the notification.',
+                        },
+                    },
+                    required: ['userId', 'type', 'details'],
+                },
             },
         },
         paths: {
@@ -109,6 +168,35 @@ const options = {
                                         items: {
                                             $ref: '#/components/schemas/NotificationRecord',
                                         },
+                                    },
+                                },
+                            },
+                        },
+                        '400': {
+                            description: 'Bad Request',
+                        },
+                    },
+                },
+                post: {
+                    summary: 'Create a new notification in the database',
+                    tags: ['Notifications'],
+                    requestBody: {
+                        required: true,
+                        content: {
+                            'application/json': {
+                                schema: {
+                                    $ref: '#/components/schemas/NotificationCreateRequest',
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        '201': {
+                            description: 'Notification created successfully',
+                            content: {
+                                'application/json': {
+                                    schema: {
+                                        $ref: '#/components/schemas/NotificationRecord',
                                     },
                                 },
                             },
