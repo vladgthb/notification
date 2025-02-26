@@ -9,8 +9,13 @@ A Notification Service for a Jira-like task management system built with:
 This project supports asynchronous notification processing via a job queue (BullMQ) and real‑time push notifications (Socket.io). Notifications are stored in PostgreSQL (with task details in a JSONB column) and the UI automatically updates without page refresh.
 
 ---
+
 ![alt text](https://github.com/vladgthb/notification/blob/main/images/backend.png)
+
+---
+
 ![alt text](https://github.com/vladgthb/notification/blob/main/images/functionality.png)
+
 ---
 
 ## Table of Contents
@@ -82,3 +87,41 @@ The components are containerized using Docker and orchestrated by Docker Compose
 ---
 
 ## Project Structure
+```
+notification/
+├── docker-compose.yml
+├── db-init/
+│   └── 00-create-notifications.sql  # Migration file For Postgress in the Docker
+├── server/
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── src/
+│   │   ├── server.ts                # Entrypoint for Express server
+│   │   ├── socket.ts                # For Socket Emit Initialization
+│   │   ├── app.ts
+│   │   ├── types.ts
+│   │   ├── routes/
+│   │   │   ├── notificationRoutes.ts
+│   │   ├── controllers/
+│   │   │   ├── notificationController.ts
+│   │   ├── swagger/
+│   │   │   ├── swagger.ts
+│   │   ├── workers/
+│   │   │   ├── notificationWorker.ts
+│   │   ├── jobs/
+│   │   │   ├── notificationQueue.ts
+│   │   └── databases/
+│   │       └── postgress.ts
+├── client/
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── public/
+│   ├── src/
+│   │   ├── App.tsx
+│   │   ├── index.tsx
+│   │   ├── api.ts
+│   │   └── socket.ts               # For Socket Listener Initialization
+└── README.md
+```
