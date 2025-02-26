@@ -250,7 +250,7 @@ const options = {
             },
         },
     },
-    apis: [], // Definitions are provided inline
+    apis: ['../routes/*.ts']
 };
 
 const swaggerSpec = swaggerJSDoc(options);
