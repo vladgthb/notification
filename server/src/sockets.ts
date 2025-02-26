@@ -15,14 +15,16 @@ export function initSocket(httpServer: HttpServer) {
 
     ioInstance.on('connection', (socket) => {
         const { userId } = socket.handshake.query;
+        console.log(`New socket connected: ${socket.id} for userId: ${userId}`);
         if (typeof userId === 'string') {
             userSocketMap.set(userId, socket.id);
             socket.join(userId);
+            console.log(`Socket ${socket.id} joined room: ${userId}`);
         }
-
         socket.on('disconnect', () => {
             if (typeof userId === 'string') {
                 userSocketMap.delete(userId);
+                console.log(`Socket ${socket.id} disconnected and removed from room ${userId}`);
             }
         });
     });
