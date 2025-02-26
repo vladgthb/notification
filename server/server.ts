@@ -1,4 +1,4 @@
-import http from 'http';
+import * as http from 'http';
 import app from './src/app';
 import { initSocket } from './src/sockets';
 import './src/workers/notificationWorker';
