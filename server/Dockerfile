@@ -2,20 +2,21 @@ FROM node:16-alpine
 
 WORKDIR /usr/src/app
 
-# Copy package and lock files
+# Copy package.json and package-lock.json (if available)
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy all source
+# Copy the rest of the project files
 COPY . .
 
-# Build TypeScript
+# Build the TypeScript project (this will compile files from "src" into "dist")
 RUN npm run build
 
-# Expose port
+# List the contents of the dist folder for debugging
+RUN ls -l dist
+
 EXPOSE 4000
 
-# Start the server
-CMD ["npm", "start"]
+CMD ["node", "dist/server.js"]
