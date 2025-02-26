@@ -1,11 +1,14 @@
-const { Queue } = require('bullmq');
-require('dotenv').config();
+import { Queue } from 'bullmq';
+import dotenv from 'dotenv';
+import { NotificationJobData } from '../types';
+
+dotenv.config();
 
 const connection = {
     host: process.env.REDIS_HOST,
-    port: parseInt(process.env.REDIS_PORT || '6379', 10),
+    port: process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT, 10) : 6379,
 };
 
-const notificationQueue = new Queue('notification-queue', { connection });
-
-module.exports = notificationQueue;
+export const notificationQueue = new Queue<NotificationJobData>('notification-queue', {
+    connection,
+});
