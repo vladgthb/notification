@@ -23,10 +23,10 @@ This project supports asynchronous notification processing via a job queue (Bull
 - [Overview](#overview)
 - [Architecture](#architecture)
 - [Project Structure](#project-structure)
-- [How To Check Functionality](#check)
 - [Prerequisites](#prerequisites)
 - [Installation & Setup](#installation--setup)
 - [Running the Application](#running-the-application)
+- [How To Check Functionality](#check)
 - [API Documentation (Swagger)](#api-documentation-swagger)
 - [Development Notes](#development-notes)
 - [Troubleshooting](#troubleshooting)
@@ -125,3 +125,50 @@ notification/
 │   │   └── socket.ts               # For Socket Listener Initialization
 └── README.md
 ```
+
+---
+
+## Prerequisites
+
+- [Docker](https://www.docker.com/get-started) and [Docker Compose](https://docs.docker.com/compose/)
+- (For local development) [Node.js](https://nodejs.org/) (if you choose not to use Docker for building)
+
+---
+
+## Installation & Setup
+
+1. **Clone the Repository:**
+
+   ```bash
+   git clone git@github.com:vladgthb/notification.git
+   cd notification
+   ```
+
+2. **Configure Environment Variables:**
+   Server: Create a server/.env file (if not already present) with:
+   ```shell
+    POSTGRES_HOST=postgres
+    POSTGRES_PORT=5432
+    POSTGRES_USER=postgres
+    POSTGRES_PASSWORD=postgres
+    POSTGRES_DB=notifications_db
+
+    REDIS_HOST=redis
+    REDIS_PORT=6379
+
+    PORT=4000
+   ```
+   
+3. **Install Dependencies Locally (Optional - Only for dev):**
+   If you plan to run parts of the project locally without Docker:
+   •	For the server:
+    ```shell
+    cd server
+    npm install
+    npm run build
+    ```
+   •	For the client:
+    ```shell
+    cd client
+    npm install
+    ```
