@@ -33,8 +33,6 @@ services:
       - redis
     ports:
       - "4000:4000"
-    volumes:
-      - ./server:/usr/src/app
     env_file:
       - ./server/.env
 
