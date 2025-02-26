@@ -26,10 +26,9 @@ This project supports asynchronous notification processing via a job queue (Bull
 - [Prerequisites](#prerequisites)
 - [Installation & Setup](#installation--setup)
 - [Running the Application](#running-the-application)
-- [How To Check Functionality](#check)
 - [API Documentation (Swagger)](#api-documentation-swagger)
 - [Development Notes](#development-notes)
-- [Troubleshooting](#troubleshooting)
+- [How To Check Functionality](#check)
 
 ---
 ## Overview
@@ -217,3 +216,11 @@ The recommended method is to use Docker Compose, which will spin up all services
 •	PATCH: Mark notifications as read.
 
 The POST endpoint requires a JSON body that includes fields like userId, type, and a details object (which must include issueKey to link the notification to the original task).
+
+---
+
+## Check
+To manually check and test the functionality please create a notification using swagger http://localhost:4000/api-docs
+and then open the UI to check the LIVE notification appearance (see the image)
+
+![alt text](https://github.com/vladgthb/notification/blob/main/images/functionality.png)
